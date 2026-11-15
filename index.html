@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0b1026">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pixel Hopper">
+<title>Pixel Hopper</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--b:clamp(56px,17vmin,88px);--gap:14px}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b1026;overflow:hidden;overscroll-behavior:none;
+  touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent;font-family:system-ui,sans-serif}
+#c{position:absolute;display:block;image-rendering:pixelated;image-rendering:crisp-edges;background:#000}
+
+/* on-screen pad: only on touch devices */
+#pad{display:none;position:fixed;inset:0;pointer-events:none;z-index:5}
+body.touch #pad{display:block}
+.btn{position:absolute;pointer-events:auto;width:var(--b);height:var(--b);border-radius:50%;
+  border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.16);color:#fff;
+  font:700 calc(var(--b)*.36)/1 system-ui,sans-serif;display:flex;align-items:center;justify-content:center;
+  touch-action:none;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.btn.on{background:rgba(255,255,255,.45);border-color:#fff}
+.btn small{position:absolute;bottom:calc(var(--b)*.1);font-size:calc(var(--b)*.16);font-weight:600;opacity:.8}
+#bL{left:calc(env(safe-area-inset-left,0px) + var(--gap));bottom:calc(env(safe-area-inset-bottom,0px) + var(--gap) + 6px)}
+#bR{left:calc(env(safe-area-inset-left,0px) + var(--gap)*2 + var(--b));bottom:calc(env(safe-area-inset-bottom,0px) + var(--gap) + 6px)}
+#bA{right:calc(env(safe-area-inset-right,0px) + var(--gap));bottom:calc(env(safe-area-inset-bottom,0px) + var(--gap) + 6px);
+  width:calc(var(--b)*1.12);height:calc(var(--b)*1.12);background:rgba(255,200,60,.28);border-color:rgba(255,220,120,.85)}
+#bB{right:calc(env(safe-area-inset-right,0px) + var(--gap)*2 + var(--b)*1.12);bottom:calc(env(safe-area-inset-bottom,0px) + var(--gap) + 6px)}
+
+/* small top-right buttons: all devices */
+.mini{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);width:34px;height:34px;border-radius:9px;
+  border:1.5px solid rgba(255,255,255,.5);background:rgba(10,16,40,.55);color:#fff;font-size:15px;line-height:1;
+  display:flex;align-items:center;justify-content:center;z-index:6;padding:0;cursor:pointer;touch-action:none}
+#bP{right:calc(env(safe-area-inset-right,0px) + 8px)}
+#bS{right:calc(env(safe-area-inset-right,0px) + 48px)}
+#bF{right:calc(env(safe-area-inset-right,0px) + 88px)}
+
+#hint{display:none;position:fixed;left:0;right:0;text-align:center;color:#9fb0e8;font-size:13px;z-index:4;pointer-events:none}
+body.touch.portrait #hint{display:block}
+</style>
+</head>
+<body>
+<canvas id="c" width="480" height="272"></canvas>
+<div id="hint">Rotate your phone for a bigger screen</div>
+
+<button class="mini" id="bF" data-act="full" aria-label="Fullscreen">&#x26F6;</button>
+<button class="mini" id="bS" data-act="sound" aria-label="Sound">&#x1F508;</button>
+<button class="mini" id="bP" data-act="pause" aria-label="Pause">&#x275A;&#x275A;</button>
+
+<div id="pad">
+  <div class="btn" id="bL" data-k="left">&#9664;</div>
+  <div class="btn" id="bR" data-k="right">&#9654;</div>
+  <div class="btn" id="bB" data-k="run">B<small>run</small></div>
+  <div class="btn" id="bA" data-k="jump">A<small>jump</small></div>
+</div>
+
+<script src="game.js"></script>
+<script>
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
